@@ -1,5 +1,5 @@
 @theme static {
-	--color-lime: oklch(78.18% 0.2 135.69); /*main*/
+	--color-lime: oklch(78.18% 0.2 135.69); /*main, getted from inspect from estapar site*/
 	--color-lime-50: oklch(98.6% 0.031 120.757);
 	--color-lime-100: oklch(96.7% 0.067 122.328);
 	--color-lime-200: oklch(93.8% 0.127 124.321);
