@@ -20,7 +20,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
 						name="Estapar"
 						className="h-8"
 					/>
-				:	<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500">
+				:	<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-500">
 						<span className="text-sm font-bold text-white">E</span>
 					</div>
 				}
@@ -28,7 +28,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
 			<button
 				onClick={onToggle}
-				className="absolute -right-3 top-12 z-10 rounded-full border border-neutral-200 bg-white p-1.5 shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/40"
+				className="absolute -right-3 top-12 z-10 rounded-full border border-neutral-200 bg-white p-1.5 shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500/40"
 				aria-expanded={isOpen}
 				aria-label={isOpen ? 'Colapsar sidebar' : 'Expandir sidebar'}
 				title={isOpen ? 'Colapsar sidebar (Ctrl+B)' : 'Expandir sidebar (Ctrl+B)'}

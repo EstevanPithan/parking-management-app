@@ -18,7 +18,7 @@ export default function Header() {
 					{/* Botão de logout */}
 					<button
 						onClick={logout}
-						className="flex items-center justify-center rounded-lg p-2 text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-green-500/40"
+						className="flex items-center justify-center rounded-lg p-2 text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-lime-500/40"
 						title="Sair"
 					>
 						<LogOut className="h-5 w-5" />

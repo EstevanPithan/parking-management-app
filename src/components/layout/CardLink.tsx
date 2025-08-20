@@ -13,14 +13,14 @@ export default function CardLink({ icon: Icon, title, description, href }: CardL
 	return (
 		<a
 			href={href}
-			className="group block rounded-2xl border border-neutral-200 bg-white p-6 transition-shadow hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 md:p-8"
+			className="group block rounded-2xl border border-neutral-200 bg-white p-6 transition-shadow hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-lime-500/40 md:p-8"
 		>
 			<div className="flex items-start justify-between">
 				{/* Conteúdo principal do card */}
 				<div className="flex-1">
 					{/* Ícone com círculo verde */}
-					<div className="inline-flex items-center justify-center rounded-xl bg-green-50 p-3">
-						<Icon className="h-6 w-6 text-green-500" />
+					<div className="inline-flex items-center justify-center rounded-xl bg-lime-50 p-3">
+						<Icon className="h-6 w-6 text-lime-500" />
 					</div>
 
 					{/* Título */}
