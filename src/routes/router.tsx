@@ -1,6 +1,7 @@
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
+import NotFound from '@/pages/NotFound'
 import { createBrowserRouter, RouteObject } from 'react-router'
 
 export const routes: RouteObject[] = [
@@ -17,6 +18,10 @@ export const routes: RouteObject[] = [
 				Component: Home,
 			},
 		],
+	},
+	{
+		path: '*',
+		Component: NotFound,
 	},
 ]
 
