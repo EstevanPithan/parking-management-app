@@ -1,3 +1,4 @@
+import AppLayout from './layout/AppLayout'
 import { Loading } from './ui/loading'
 import { useAuth } from '@/contexts/AuthContext'
 import { Navigate, Outlet, useLocation } from 'react-router'
@@ -19,5 +20,9 @@ export function ProtectedRoute() {
 		)
 	}
 
-	return <Outlet />
+	return (
+		<AppLayout>
+			<Outlet />
+		</AppLayout>
+	)
 }
