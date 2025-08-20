@@ -28,14 +28,12 @@ export default function Login() {
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-gray-50">
 			<div className="w-full max-w-md space-y-8">
-				{/* Logo */}
 				<div className="flex justify-center">
 					<div className="flex items-center space-x-3">
 						<Icon name="Estapar" />
 					</div>
 				</div>
 
-				{/* Form */}
 				<div className="rounded-lg border border-gray-100 bg-white p-8 shadow-lg">
 					<div className="mb-6">
 						<h2 className="text-center text-base font-medium text-gray-600">
@@ -47,14 +45,12 @@ export default function Login() {
 						onSubmit={handleSubmit}
 						className="space-y-6"
 					>
-						{/* Mensagem de erro */}
 						{error && (
 							<div className="rounded-md bg-red-50 p-4">
 								<div className="text-sm text-red-700">{error}</div>
 							</div>
 						)}
 
-						{/* Usuário */}
 						<div className="space-y-2">
 							<label
 								htmlFor="username"
@@ -78,7 +74,6 @@ export default function Login() {
 							</div>
 						</div>
 
-						{/* Senha */}
 						<div className="space-y-2">
 							<label
 								htmlFor="password"
@@ -102,7 +97,6 @@ export default function Login() {
 							</div>
 						</div>
 
-						{/* Botão */}
 						<Button
 							type="submit"
 							disabled={loading}
