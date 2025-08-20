@@ -22,11 +22,11 @@ export const routes: RouteObject[] = [
 				path: '/garagens',
 				Component: GarageList,
 			},
+			{
+				path: '*',
+				Component: NotFound,
+			},
 		],
-	},
-	{
-		path: '*',
-		Component: NotFound,
 	},
 ]
 
