@@ -1,4 +1,5 @@
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import { createBrowserRouter, RouteObject } from 'react-router'
 
@@ -11,16 +12,10 @@ export const routes: RouteObject[] = [
 		path: '/',
 		element: <ProtectedRoute />,
 		children: [
-			// {
-			// 	path: '',
-			// 	Component: Home,
-			// 	children: [
-			// 		{
-			// 			path: 'test',
-			// 			Component: ComponentsTest,
-			// 		},
-			// 	],
-			// },
+			{
+				path: '',
+				Component: Home,
+			},
 		],
 	},
 ]

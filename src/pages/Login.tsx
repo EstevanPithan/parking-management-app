@@ -3,21 +3,31 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/contexts/AuthContext'
 import { User, Lock } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router'
 
 export default function Login() {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState('')
-	const { login, loading } = useAuth()
+	const { login, loading, isAuthenticated } = useAuth()
+	const navigate = useNavigate()
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/', { replace: true })
+		}
+	}, [isAuthenticated, navigate])
+
+	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault()
 		setError('')
 
 		try {
 			const success = await login({ username, password })
-			if (!success) {
+			if (success) {
+				navigate('/', { replace: true })
+			} else {
 				setError('Credenciais inválidas. Tente novamente.')
 			}
 		} catch {
