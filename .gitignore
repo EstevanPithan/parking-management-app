@@ -8,17 +8,39 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.DS_Store
 dist
 dist-ssr
+coverage
 *.local
+
+/cypress/videos/
+/cypress/screenshots/
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.d.ts
+
+# lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+bun.lock
+
+.env
+.env.*
+
+# Auto-generated type declarations
+components.d.ts
+auto-imports.d.ts
+
+# Mise configs
+mise.local.toml
