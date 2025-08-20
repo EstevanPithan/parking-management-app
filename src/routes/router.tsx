@@ -1,4 +1,5 @@
 import { ProtectedRoute } from '@/components/ProtectedRoute'
+import GarageList from '@/pages/GarageList'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import NotFound from '@/pages/NotFound'
@@ -16,6 +17,10 @@ export const routes: RouteObject[] = [
 			{
 				path: '',
 				Component: Home,
+			},
+			{
+				path: '/garagens',
+				Component: GarageList,
 			},
 		],
 	},
