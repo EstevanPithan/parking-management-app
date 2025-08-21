@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { useDebounce, useGaragesList } from '@/hooks'
+import { useDebounce, useGaragesList, usePrefetchGarage } from '@/hooks'
 import { Search, Eye, Building2 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -17,6 +17,8 @@ export default function GarageList() {
 		pageSize: 50,
 		garageName: debouncedSearchTerm || undefined,
 	})
+
+	const prefetchGarage = usePrefetchGarage()
 
 	return (
 		<div className="h-full bg-white">
@@ -108,6 +110,7 @@ export default function GarageList() {
 														variant="ghost"
 														size="icon"
 														className="h-8 w-8 text-gray-400 hover:text-gray-600"
+														onMouseEnter={() => prefetchGarage(garage.code)}
 													>
 														<Eye className="h-4 w-4" />
 													</Button>
