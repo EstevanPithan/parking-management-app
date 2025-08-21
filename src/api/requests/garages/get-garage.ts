@@ -14,7 +14,7 @@ const getGarageResponseSchema = z.object({
 	city: z.string(),
 	state: z.string(),
 	region: z.string(),
-	subsidiary: z.string(),
+	subsidiary: z.string().optional(),
 	countSpaces: z.number().int(),
 	occupiedSpaces: z.number().int(),
 	maxDiscountPercent: z.number().int(),
@@ -24,5 +24,14 @@ export type GetGarageResponse = z.infer<typeof getGarageResponseSchema>
 
 export async function getGarage(params: GetGarageVariables) {
 	const response = await api.get('garage', { params })
-	return getGarageResponseSchema.parse(response.data)
+
+	const parseResult = getGarageResponseSchema.safeParse(response.data)
+
+	if (!parseResult.success) {
+		console.error('Erro no parsing do schema (get-garage):', parseResult.error)
+		console.error('Dados recebidos:', response.data)
+		throw parseResult.error
+	}
+
+	return parseResult.data
 }

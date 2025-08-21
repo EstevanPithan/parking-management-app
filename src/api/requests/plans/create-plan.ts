@@ -35,5 +35,14 @@ export type CreatePlanResponse = z.infer<typeof createPlanResponseSchema>
 
 export async function createPlan(data: CreatePlanVariables) {
 	const response = await api.post('plan', data)
-	return createPlanResponseSchema.parse(response.data)
+
+	const parseResult = createPlanResponseSchema.safeParse(response.data)
+
+	if (!parseResult.success) {
+		console.error('Erro no parsing do schema (create-plan):', parseResult.error)
+		console.error('Dados recebidos:', response.data)
+		throw parseResult.error
+	}
+
+	return parseResult.data
 }

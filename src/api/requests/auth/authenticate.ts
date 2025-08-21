@@ -24,5 +24,14 @@ export type AuthenticateResponse = z.infer<typeof authenticateResponseSchema>
 
 export async function authenticate(data: AuthenticateVariables) {
 	const response = await api.post('Authenticate', data)
-	return authenticateResponseSchema.parse(response.data)
+
+	const parseResult = authenticateResponseSchema.safeParse(response.data)
+
+	if (!parseResult.success) {
+		console.error('Erro no parsing do schema (authenticate):', parseResult.error)
+		console.error('Dados recebidos:', response.data)
+		throw parseResult.error
+	}
+
+	return parseResult.data
 }
