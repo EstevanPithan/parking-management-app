@@ -14,7 +14,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
 				isOpen ? 'w-[264px]' : 'w-[64px]'
 			}`}
 		>
-			<div className="flex h-16 items-center justify-center border-b border-neutral-200 px-0">
+			<div className="flex h-12 items-center justify-start border-b border-neutral-200 px-0">
 				<div
 					className={`relative flex h-8 items-center justify-start overflow-hidden transition-all duration-300 ease-out ${
 						isOpen ? 'w-40' : 'w-13'
@@ -29,7 +29,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
 			<button
 				onClick={onToggle}
-				className="absolute -right-3 top-12 z-10 rounded-full border border-neutral-200 bg-white p-1.5 shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500/40"
+				className="absolute -right-3 top-8 z-10 rounded-full border border-neutral-200 bg-white p-1.5 shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500/40"
 				aria-expanded={isOpen}
 				aria-label={isOpen ? 'Colapsar sidebar' : 'Expandir sidebar'}
 			>
