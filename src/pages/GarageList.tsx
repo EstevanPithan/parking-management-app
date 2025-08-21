@@ -1,48 +1,25 @@
-import {
-	GetGaragesPaginatedListResponse,
-	getGaragesPaginatedList,
-} from '@/api/requests/garages/get-garages-paginated-list'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { useDebounce, useGaragesList } from '@/hooks'
 import { Search, Eye, Building2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function GarageList() {
-	const [garages, setGarages] = useState<GetGaragesPaginatedListResponse | null>(null)
 	const [searchTerm, setSearchTerm] = useState('')
-	const [isLoading, setIsLoading] = useState(true)
 	const [digitalMonthlyEnabled, setDigitalMonthlyEnabled] = useState(true)
 
-	useEffect(() => {
-		const fetchGarages = async () => {
-			try {
-				setIsLoading(true)
-				const response = await getGaragesPaginatedList({
-					currentPage: 1,
-					pageSize: 50,
-					garageName: searchTerm || undefined,
-				})
-				setGarages(response)
-			} catch {
-				// Erro ao carregar garagens
-			} finally {
-				setIsLoading(false)
-			}
-		}
+	const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
-		const debounceTimeout = setTimeout(fetchGarages, 300)
-		return () => clearTimeout(debounceTimeout)
-	}, [searchTerm])
-
-	const handleToggleMensalista = () => {
-		setDigitalMonthlyEnabled(!digitalMonthlyEnabled)
-	}
+	const { data: garages, isLoading } = useGaragesList({
+		currentPage: 1,
+		pageSize: 50,
+		garageName: debouncedSearchTerm || undefined,
+	})
 
 	return (
 		<div className="h-full bg-white">
-			{/* Main Content */}
 			<div className="px-10">
 				<div className="mx-auto">
 					<div className="mb-6">
