@@ -4,13 +4,12 @@ import {
 } from '@/api/requests/garages/get-garages-paginated-list'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { EstaparIcon } from '@/icons/EstaparIcon'
-import { Search, Eye, ArrowLeft } from 'lucide-react'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Search, Eye, Building2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
 
 export default function GarageList() {
-	const navigate = useNavigate()
 	const [garages, setGarages] = useState<GetGaragesPaginatedListResponse | null>(null)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isLoading, setIsLoading] = useState(true)
@@ -41,88 +40,45 @@ export default function GarageList() {
 		setDigitalMonthlyEnabled(!digitalMonthlyEnabled)
 	}
 
-	const handleGoBack = () => {
-		navigate(-1)
-	}
-
 	return (
-		<div className="min-h-screen bg-gray-50">
-			{/* Header */}
-			<div className="border-b border-gray-200 bg-white">
-				<div className="px-6 py-4">
-					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-4">
-							<Button
-								variant="ghost"
-								size="icon"
-								onClick={handleGoBack}
-								className="h-8 w-8"
-							>
-								<ArrowLeft className="h-4 w-4" />
-							</Button>
-							<div className="flex items-center gap-3">
-								<EstaparIcon className="h-8 w-auto text-lime-500" />
-								<span className="text-sm text-gray-600">Roberto Freitas</span>
-							</div>
-						</div>
-						<Button
-							variant="outline"
-							className="text-sm"
-						>
-							Sair
-						</Button>
-					</div>
-				</div>
-			</div>
-
+		<div className="h-full bg-white">
 			{/* Main Content */}
-			<div className="px-6 py-8">
-				<div className="mx-auto max-w-7xl">
-					{/* Page Header */}
-					<div className="mb-8">
-						<div className="mb-2 flex items-center gap-3">
-							<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-100">
-								<div className="h-4 w-4 rounded bg-lime-500"></div>
-							</div>
+			<div className="px-10">
+				<div className="mx-auto">
+					<div className="mb-6">
+						<div className="flex items-center gap-3">
+							<Building2 className="text-lime" />
 							<h1 className="text-2xl font-semibold text-gray-900">Garagens</h1>
 						</div>
-						<p className="text-gray-600">Visualize as garagens habilitadas para mensalistas digitais.</p>
+						<p className="text-gray-500">Visualize as garagens habilitadas para mensalistas digitais.</p>
 					</div>
 
-					{/* Controls */}
-					<div className="mb-6 rounded-lg border border-gray-200 bg-white">
-						<div className="border-b border-gray-200 p-6">
-							<div className="flex items-center justify-between">
-								<div className="flex items-center gap-3">
-									<div
-										className={`h-6 w-12 cursor-pointer rounded-full p-1 transition-colors ${
-											digitalMonthlyEnabled ? 'bg-lime-500' : 'bg-gray-300'
-										}`}
-										onClick={handleToggleMensalista}
-									>
-										<div
-											className={`h-4 w-4 rounded-full bg-white transition-transform ${
-												digitalMonthlyEnabled ? 'translate-x-6' : 'translate-x-0'
-											}`}
-										></div>
-									</div>
-									<span className="text-sm font-medium text-gray-900">Mensalista Digital</span>
-									<span className="text-sm text-gray-500">{garages?.countRecords || 0} registros</span>
-								</div>
+					<div className="mb-5 rounded border border-gray-200 p-4">
+						<div className="flex items-center justify-between">
+							<div className="flex items-center justify-between gap-3">
+								<Switch
+									size="lg"
+									checked={digitalMonthlyEnabled}
+									onCheckedChange={setDigitalMonthlyEnabled}
+								/>
+								<Label>Mensalista Digital</Label>
+							</div>
 
-								<div className="relative w-80">
-									<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-									<Input
-										placeholder="Buscar por nome"
-										value={searchTerm}
-										onChange={(e) => setSearchTerm(e.target.value)}
-										className="pl-10"
-									/>
-								</div>
+							<Label className="text-sm text-gray-400">{garages?.countRecords || 0} registros</Label>
+
+							<div className="relative">
+								<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+								<Input
+									placeholder="Buscar por nome"
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+									className="pl-10"
+								/>
 							</div>
 						</div>
+					</div>
 
-						{/* Table */}
+					<div className="mb-6 rounded-lg border border-gray-200 bg-white">
 						<div className="overflow-x-auto">
 							<table className="w-full">
 								<thead className="bg-gray-50">
