@@ -58,10 +58,13 @@ Uma aplicação web moderna para gerenciamento de estacionamentos — com UX ins
 - Cores primárias extraídas diretamente da marca Estapar
 
 LINKS E REPOSITÓRIO
----------------------------------------------------
+
 Repositório: https://github.com/EstevanPithan/parking-management-app
+
 Site implementado: https://estapar.netlify.app
----------------------------------------------------
+
+Usuário: estapar
+Senha: @estapar@
 
 ## 🛠️ Como Executar
 ```bash
