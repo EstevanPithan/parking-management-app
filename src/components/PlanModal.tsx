@@ -8,7 +8,6 @@ import { Loading } from '@/components/ui/loading'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { useCreatePlan } from '@/hooks'
-import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -33,7 +32,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 		amountDailyCancellationInCents: '',
 		startValidity: '',
 		endValidity: '',
-		descriptionAvailable: '',
 	})
 
 	const isEditing = !!plan
@@ -49,7 +47,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 				amountDailyCancellationInCents: plan.amountDailyCancellationInCents.toString(),
 				startValidity: plan.startValidity,
 				endValidity: plan.endValidity || '',
-				descriptionAvailable: plan.descriptionAvailable,
 			})
 		} else {
 			setFormData({
@@ -61,7 +58,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 				amountDailyCancellationInCents: '',
 				startValidity: '',
 				endValidity: '',
-				descriptionAvailable: '',
 			})
 		}
 	}, [plan, open])
@@ -79,16 +75,24 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 			toast.error('Data de fim é obrigatória')
 			return
 		}
+
+		const today = new Date().toISOString().split('T')[0]
+		if (formData.startValidity < today) {
+			toast.error('Data de início deve ser igual ou posterior à data de hoje')
+			return
+		}
+
+		if (formData.endValidity <= formData.startValidity) {
+			toast.error('Data de fim deve ser posterior à data de início')
+			return
+		}
+
 		if (!formData.priceInCents.trim()) {
 			toast.error('Preço é obrigatório')
 			return
 		}
 		if (!formData.amountDailyCancellationInCents.trim()) {
 			toast.error('Valor de cancelamento é obrigatório')
-			return
-		}
-		if (!formData.descriptionAvailable.trim()) {
-			toast.error('Descrição disponível é obrigatória')
 			return
 		}
 
@@ -100,7 +104,7 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 				endValidity: formData.endValidity,
 				priceInCents: formData.priceInCents.trim(),
 				active: formData.active,
-				descriptionAvailable: formData.descriptionAvailable.trim(),
+				descriptionAvailable: formData.description.trim(),
 				amountDailyCancellationInCents: formData.amountDailyCancellationInCents.trim(),
 				vehicleType: formData.vehicleType,
 				totalVacancies: formData.totalVacancies,
@@ -142,43 +146,38 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 					<p className="text-sm text-gray-500">
 						{isEditing ? 'Edite os dados do plano existente.' : 'Preencha os dados para criar um novo plano.'}
 					</p>
-					<Button
-						variant="ghost"
-						size="sm"
-						className="absolute right-0 top-0 h-8 w-8 p-0"
-						onClick={handleCancel}
-					>
-						<X className="h-4 w-4" />
-					</Button>
 				</DialogHeader>
 
-				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-					<div className="md:col-span-2">
-						<Label
-							htmlFor="description"
-							className="text-sm font-medium text-gray-700"
-						>
-							Descrição
-						</Label>
-						<Input
-							id="description"
-							placeholder="Digite a descrição do plano"
-							value={formData.description}
-							onChange={(e) => handleInputChange('description', e.target.value)}
-							className="mt-1"
-						/>
-					</div>
-
-					<div>
-						<Label className="text-sm font-medium text-gray-700">Status</Label>
-						<div className="mt-2 flex items-center gap-3">
-							<Switch
-								checked={formData.active === 'true'}
-								onCheckedChange={(checked) => handleInputChange('active', checked ? 'true' : 'false')}
-							/>
-							<span className="text-sm font-medium text-lime-600">
-								{formData.active === 'true' ? 'Ativo' : 'Inativo'}
-							</span>
+				<div className="grid grid-cols-2 gap-6">
+					<div className="col-span-2">
+						<div className="flex w-full items-center justify-center gap-2">
+							<div className="w-[80%]">
+								<Label
+									htmlFor="description"
+									className="text-sm font-medium text-gray-700"
+								>
+									Descrição
+								</Label>
+								<Input
+									id="description"
+									placeholder="Digite a descrição do plano"
+									value={formData.description}
+									onChange={(e) => handleInputChange('description', e.target.value)}
+									className="mt-1"
+								/>
+							</div>
+							<div className="w-[20%]">
+								<Label className="text-sm font-medium text-gray-700">Status</Label>
+								<div className="mt-2 flex items-center gap-3">
+									<Switch
+										checked={formData.active === 'true'}
+										onCheckedChange={(checked) => handleInputChange('active', checked ? 'true' : 'false')}
+									/>
+									<span className={`text-sm font-medium ${formData.active ? 'text-lime-600' : 'text-gray-600'}`}>
+										{formData.active === 'true' ? 'Ativo' : 'Inativo'}
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 
@@ -193,7 +192,7 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 							value={formData.vehicleType}
 							onValueChange={(value) => handleInputChange('vehicleType', value)}
 						>
-							<SelectTrigger className="mt-1">
+							<SelectTrigger className="mt-2 w-full">
 								<SelectValue placeholder="Selecione o tipo" />
 							</SelectTrigger>
 							<SelectContent>
@@ -266,13 +265,16 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						>
 							Início da Validade
 						</Label>
-						<Input
-							id="startValidity"
-							type="date"
-							value={formData.startValidity}
-							onChange={(e) => handleInputChange('startValidity', e.target.value)}
-							className="mt-1"
-						/>
+						<div className="relative mt-1">
+							<Input
+								id="startValidity"
+								type="date"
+								min={new Date().toISOString().split('T')[0]}
+								value={formData.startValidity}
+								onChange={(e) => handleInputChange('startValidity', e.target.value)}
+								className="w-full pr-10 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-70 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+							/>
+						</div>
 					</div>
 
 					<div>
@@ -282,30 +284,16 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						>
 							Fim da Validade
 						</Label>
-						<Input
-							id="endValidity"
-							type="date"
-							placeholder="dd/mm/aaaa"
-							value={formData.endValidity}
-							onChange={(e) => handleInputChange('endValidity', e.target.value)}
-							className="mt-1"
-						/>
-					</div>
-
-					<div className="md:col-span-2">
-						<Label
-							htmlFor="descriptionAvailable"
-							className="text-sm font-medium text-gray-700"
-						>
-							Descrição Disponível
-						</Label>
-						<Input
-							id="descriptionAvailable"
-							placeholder="Digite a descrição disponível"
-							value={formData.descriptionAvailable}
-							onChange={(e) => handleInputChange('descriptionAvailable', e.target.value)}
-							className="mt-1"
-						/>
+						<div className="relative mt-1">
+							<Input
+								id="endValidity"
+								type="date"
+								min={formData.startValidity || new Date().toISOString().split('T')[0]}
+								value={formData.endValidity}
+								onChange={(e) => handleInputChange('endValidity', e.target.value)}
+								className="w-full pr-10 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-70 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+							/>
+						</div>
 					</div>
 				</div>
 
@@ -329,7 +317,7 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 							</div>
 						: isEditing ?
 							'Salvar Alterações'
-						:	'Criar'}
+						:	'Criar Plano'}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
