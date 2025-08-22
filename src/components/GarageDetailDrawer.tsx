@@ -228,13 +228,6 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 																					>
 																						<Edit className="size-4" />
 																					</Button>
-																					<Button
-																						variant="ghost"
-																						size="icon"
-																						className="size-6 text-gray-400 hover:text-gray-600"
-																					>
-																						<QrCode className="size-4" />
-																					</Button>
 																				</div>
 																			</TableCell>
 																		</TableRow>

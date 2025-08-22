@@ -31,49 +31,54 @@ export function useCreatePlan() {
 			queryClient.setQueryData(['plans', { garageId: newPlan.garageId }], (old: GetPlansResponse) => {
 				if (!old) return old
 
-				const existingPlanIndex = old.findIndex((plan) => plan.idPlan?.toString() === newPlan.id)
+				if (newPlan.id) {
+					const existingPlanIndex = old.findIndex((plan) => plan.idPlan?.toString() === newPlan.id)
 
-				if (existingPlanIndex !== -1) {
-					const updatedPlans = [...old]
-					updatedPlans[existingPlanIndex] = {
-						...updatedPlans[existingPlanIndex],
-						description: newPlan.description,
-						startValidity: newPlan.startValidity,
-						endValidity: newPlan.endValidity,
-						priceInCents: parseInt(newPlan.priceInCents),
-						active: newPlan.active === 'true',
-						descriptionAvailable: newPlan.descriptionAvailable,
-						amountDailyCancellationInCents: parseInt(newPlan.amountDailyCancellationInCents),
-						veichleType: parseInt(newPlan.vehicleType),
-						totalVacancies: newPlan.totalVacancies,
+					if (existingPlanIndex !== -1) {
+						const updatedPlans = [...old]
+						updatedPlans[existingPlanIndex] = {
+							...updatedPlans[existingPlanIndex],
+							description: newPlan.description,
+							startValidity: newPlan.startValidity,
+							endValidity: newPlan.endValidity,
+							priceInCents: parseInt(newPlan.priceInCents),
+							active: newPlan.active === 'true',
+							descriptionAvailable: newPlan.descriptionAvailable,
+							amountDailyCancellationInCents: parseInt(newPlan.amountDailyCancellationInCents),
+							veichleType: parseInt(newPlan.vehicleType),
+							VeichleType: parseInt(newPlan.vehicleType),
+							totalVacancies: newPlan.totalVacancies,
+						}
+						return updatedPlans
 					}
-					return updatedPlans
-				} else {
-					const newPlanItem = {
-						idPlan: parseInt(newPlan.id),
-						idGarage: parseInt(newPlan.garageId),
-						description: newPlan.description,
-						startValidity: newPlan.startValidity,
-						endValidity: newPlan.endValidity,
-						priceInCents: parseInt(newPlan.priceInCents),
-						active: newPlan.active === 'true',
-						descriptionAvailable: newPlan.descriptionAvailable,
-						amountDailyCancellationInCents: parseInt(newPlan.amountDailyCancellationInCents),
-						veichleType: parseInt(newPlan.vehicleType),
-						totalVacancies: newPlan.totalVacancies,
-					}
-					return [newPlanItem, ...old]
 				}
+
+				const newPlanItem = {
+					idPlan: Math.floor(Math.random() * 100000),
+					idGarage: parseInt(newPlan.garageId),
+					description: newPlan.description,
+					startValidity: newPlan.startValidity,
+					endValidity: newPlan.endValidity,
+					priceInCents: parseInt(newPlan.priceInCents),
+					active: newPlan.active === 'true',
+					descriptionAvailable: newPlan.descriptionAvailable,
+					amountDailyCancellationInCents: parseInt(newPlan.amountDailyCancellationInCents),
+					veichleType: parseInt(newPlan.vehicleType),
+					VeichleType: parseInt(newPlan.vehicleType),
+					totalVacancies: newPlan.totalVacancies,
+				}
+				return [newPlanItem, ...old]
 			})
 
 			return { previousPlans, garageId: newPlan.garageId }
 		},
-		onError: (_err, _newPlan, context) => {
+		onError: (_err, newPlan, context) => {
 			if (context?.previousPlans) {
 				queryClient.setQueryData(['plans', { garageId: context.garageId }], context.previousPlans)
 			}
+			queryClient.invalidateQueries({ queryKey: ['plans', { garageId: newPlan.garageId }] })
 		},
-		onSettled: (_data, _error, variables) => {
+		onSuccess: (_data, variables) => {
 			queryClient.invalidateQueries({ queryKey: ['plans', { garageId: variables.garageId }] })
 		},
 	})

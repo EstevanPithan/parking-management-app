@@ -29,11 +29,15 @@ export type GetPlansResponse = z.infer<typeof getPlansResponseSchema>
 export async function getPlans(params: GetPlansVariables = {}) {
 	const response = await api.get('plans', { params })
 
-	const parseResult = getPlansResponseSchema.safeParse(response.data)
+	// Extract the actual plans data from the response
+	const plansData = response.data?.data || response.data
+
+	const parseResult = getPlansResponseSchema.safeParse(plansData)
 
 	if (!parseResult.success) {
 		console.error('Schema parsing error (get-plans):', parseResult.error)
 		console.error('Received data:', response.data)
+		console.error('Plans data:', plansData)
 		throw parseResult.error
 	}
 

@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import { useCreatePlan } from '@/hooks'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 type PlanItem = GetPlansResponse[0]
 
@@ -65,25 +66,54 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 	}, [plan, open])
 
 	const handleSave = async () => {
+		if (!formData.description.trim()) {
+			toast.error('Descrição é obrigatória')
+			return
+		}
+		if (!formData.startValidity) {
+			toast.error('Data de início é obrigatória')
+			return
+		}
+		if (!formData.endValidity) {
+			toast.error('Data de fim é obrigatória')
+			return
+		}
+		if (!formData.priceInCents.trim()) {
+			toast.error('Preço é obrigatório')
+			return
+		}
+		if (!formData.amountDailyCancellationInCents.trim()) {
+			toast.error('Valor de cancelamento é obrigatório')
+			return
+		}
+		if (!formData.descriptionAvailable.trim()) {
+			toast.error('Descrição disponível é obrigatória')
+			return
+		}
+
 		try {
 			const planData: CreatePlanVariables = {
-				id: plan?.idPlan?.toString() || '',
 				garageId,
-				description: formData.description,
+				description: formData.description.trim(),
 				startValidity: formData.startValidity,
 				endValidity: formData.endValidity,
-				priceInCents: formData.priceInCents,
+				priceInCents: formData.priceInCents.trim(),
 				active: formData.active,
-				descriptionAvailable: formData.descriptionAvailable,
-				amountDailyCancellationInCents: formData.amountDailyCancellationInCents,
+				descriptionAvailable: formData.descriptionAvailable.trim(),
+				amountDailyCancellationInCents: formData.amountDailyCancellationInCents.trim(),
 				vehicleType: formData.vehicleType,
 				totalVacancies: formData.totalVacancies,
 			}
 
+			if (isEditing && plan?.idPlan) {
+				planData.id = plan.idPlan.toString()
+			}
+
 			await createPlanMutation.mutateAsync(planData)
+			toast.success(isEditing ? 'Plano atualizado com sucesso!' : 'Plano criado com sucesso!')
 			onOpenChange(false)
 		} catch {
-			// TODO: Adicionar notificação de erro para o usuário
+			toast.error('Erro ao salvar plano. Tente novamente.')
 		}
 	}
 
@@ -122,7 +152,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 				</DialogHeader>
 
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-					{/* Descrição */}
 					<div className="md:col-span-2">
 						<Label
 							htmlFor="description"
@@ -139,7 +168,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						/>
 					</div>
 
-					{/* Status */}
 					<div>
 						<Label className="text-sm font-medium text-gray-700">Status</Label>
 						<div className="mt-2 flex items-center gap-3">
@@ -153,7 +181,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						</div>
 					</div>
 
-					{/* Tipo de Veículo */}
 					<div>
 						<Label
 							htmlFor="vehicleType"
@@ -176,7 +203,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						</Select>
 					</div>
 
-					{/* Total de Vagas */}
 					<div>
 						<Label
 							htmlFor="totalVacancies"
@@ -194,7 +220,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						/>
 					</div>
 
-					{/* Valor (R$) */}
 					<div>
 						<Label
 							htmlFor="priceInCents"
@@ -214,7 +239,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						/>
 					</div>
 
-					{/* Valor do Cancelamento (R$) */}
 					<div>
 						<Label
 							htmlFor="amountDailyCancellationInCents"
@@ -234,7 +258,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						/>
 					</div>
 
-					{/* Início da Validade */}
 					<div>
 						<Label
 							htmlFor="startValidity"
@@ -251,7 +274,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						/>
 					</div>
 
-					{/* Fim da Validade */}
 					<div>
 						<Label
 							htmlFor="endValidity"
@@ -269,7 +291,6 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						/>
 					</div>
 
-					{/* Descrição Disponível */}
 					<div className="md:col-span-2">
 						<Label
 							htmlFor="descriptionAvailable"
