@@ -5,7 +5,7 @@ export default function NotFound() {
 		<div className="flex min-h-screen items-center justify-center bg-white">
 			<div className="w-full max-w-xl px-6 py-12 text-center">
 				<img
-					src="src/assets/not-found.png	"
+					src="/not-found.png"
 					alt="Página não encontrada"
 					className="mx-auto mb-6 h-80 w-auto object-contain"
 				/>
