@@ -1,11 +1,23 @@
 import PlanModal from '@/components/PlanModal'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { CustomTabs, CustomTabsContent, CustomTabsList, CustomTabsTrigger } from '@/components/ui/custom-tabs'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { StatCard } from '@/components/ui/stat-card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useGarage, useIsMobile, usePlans } from '@/hooks'
 import { formatCurrency } from '@/lib/utils'
-import { Building2, Edit, MapPin, Plus, QrCode, UserCheck, UserMinus, Users } from 'lucide-react'
+import {
+	Building,
+	Building2,
+	CircleDollarSignIcon,
+	Edit,
+	MapPin,
+	Plus,
+	QrCode,
+	UserCheck,
+	UserMinus,
+	Users,
+} from 'lucide-react'
 import { useState } from 'react'
 
 interface GarageDetailDrawerProps {
@@ -46,187 +58,204 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 		>
 			<SheetContent
 				side="right"
-				className="w-full max-w-2xl overflow-y-auto sm:max-w-xl md:max-w-2xl"
+				className="h-screen max-h-full w-full max-w-3xl overflow-hidden p-2 sm:max-w-xl md:max-w-6xl"
 			>
 				{isLoading ?
 					<div className="flex h-full items-center justify-center">
 						<span className="text-sm text-gray-500">Carregando...</span>
 					</div>
 				: garage ?
-					<div className="flex h-full flex-col gap-4">
-						<SheetHeader>
-							<div className="flex items-center gap-3">
-								<Building2 className="text-lime" />
-								<div className="flex-1">
-									<SheetTitle className="text-xl font-semibold text-gray-900">{garage.name}</SheetTitle>
-									<p className="text-sm text-gray-500">Código: {garage.code}</p>
+					<div className="flex h-full flex-col gap-4 overflow-hidden">
+						<div className="flex-shrink-0">
+							<SheetHeader>
+								<div className="flex flex-col items-start justify-center gap-2">
+									<div className="flex items-center justify-center gap-4">
+										<Building2 className="size-8" />
+										<SheetTitle className="text-3xl font-semibold text-gray-900">{garage.name}</SheetTitle>
+									</div>
+									<span className="text-xs text-gray-500">Código: {garage.code}</span>
+								</div>
+							</SheetHeader>
+
+							<div className="flex flex-col items-start gap-3 px-4">
+								<div className="flex gap-2">
+									<MapPin className="size-5 text-gray-500" />
+									<span className="text-sm text-gray-500">{garage.address.toUpperCase()}</span>
+								</div>
+
+								<div className="flex gap-2">
+									<Building className="size-5 text-gray-500" />
+									<span className="text-sm text-gray-500">
+										{garage.subsidiary ? `Filial: ${garage.subsidiary.toUpperCase()} • ` : ''}
+										Regional: {garage.region.toUpperCase()}
+									</span>
 								</div>
 							</div>
-						</SheetHeader>
+						</div>
 
-						<div className="flex-1 space-y-4 overflow-y-auto">
-							{/* Location and Basic Info */}
-							<Card className="p-4">
-								<div className="flex items-start gap-3">
-									<MapPin className="mt-1 h-5 w-5 text-gray-500" />
-									<div className="flex-1">
-										<h2 className="text-sm font-medium text-gray-900">{garage.address}</h2>
-										<p className="text-xs text-gray-500">
-											{garage.subsidiary ? `Filial: ${garage.subsidiary} • ` : ''}
-											Regional: {garage.region}
-										</p>
-									</div>
-								</div>
-							</Card>
+						<CustomTabs
+							defaultValue="digital"
+							className="flex flex-1 flex-col overflow-hidden px-4"
+							orientation="horizontal"
+						>
+							<CustomTabsList orientation="horizontal">
+								<CustomTabsTrigger
+									value="digital"
+									orientation="horizontal"
+								>
+									Mensalista digital
+								</CustomTabsTrigger>
+							</CustomTabsList>
 
-							{/* Parking Stats */}
-							<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-								<Card className="p-4">
-									<div className="flex items-center gap-3">
-										<Users className="h-5 w-5 text-gray-500" />
-										<div>
-											<p className="text-sm text-gray-500">Total de Vagas</p>
-											<p className="text-xl font-semibold text-gray-900">{garage.countSpaces}</p>
-										</div>
+							<CustomTabsContent
+								value="digital"
+								className="flex flex-1 flex-col space-y-4 overflow-hidden px-4"
+							>
+								<div className="flex w-full flex-shrink-0 items-center gap-2">
+									<div className="grid w-full grid-cols-1 gap-3 md:grid-cols-3">
+										<StatCard
+											label="Total de Vagas"
+											value={garage.countSpaces}
+											icon={Users}
+											iconColor="text-gray-500"
+											valueColor="text-gray-900"
+										/>
+										<StatCard
+											label="Ocupadas"
+											value={garage.occupiedSpaces}
+											icon={UserCheck}
+											iconColor="text-orange-500"
+											valueColor="text-orange-600"
+										/>
+										<StatCard
+											label="Disponíveis"
+											value={availableSpaces}
+											icon={UserMinus}
+											iconColor="text-lime-600"
+											valueColor="text-lime-600"
+										/>
 									</div>
-								</Card>
-
-								<Card className="p-4">
-									<div className="flex items-center gap-3">
-										<UserCheck className="h-5 w-5 text-orange-500" />
-										<div>
-											<p className="text-sm text-gray-500">Ocupadas</p>
-											<p className="text-xl font-semibold text-orange-600">{garage.occupiedSpaces}</p>
-										</div>
-									</div>
-								</Card>
-
-								<Card className="p-4">
-									<div className="flex items-center gap-3">
-										<UserMinus className="h-5 w-5 text-lime-600" />
-										<div>
-											<p className="text-sm text-gray-500">Disponíveis</p>
-											<p className="text-xl font-semibold text-lime-600">{availableSpaces}</p>
-										</div>
-									</div>
-								</Card>
-							</div>
-
-							{/* QR Code Section */}
-							<Card className="p-4">
-								<div className="flex items-center justify-between">
-									<div className="flex items-center gap-3">
-										<QrCode className="h-5 w-5 text-gray-500" />
-										<div>
-											<h3 className="text-sm font-medium text-gray-900">Mensalista Digital</h3>
-											<p className="text-xs text-gray-500">QR Code para acesso de mensalistas digitais</p>
-										</div>
-									</div>
-									<div className="h-16 w-16 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50">
-										<div className="flex h-full w-full items-center justify-center">
-											<QrCode className="h-8 w-8 text-gray-400" />
-										</div>
-									</div>
-								</div>
-							</Card>
-
-							{/* Plans Section */}
-							<Card className="flex-1 p-4">
-								<div className="mb-4 flex items-center justify-between">
-									<div className="flex items-center gap-3">
-										<div className="h-1 w-6 bg-lime-500"></div>
-										<h3 className="text-base font-semibold text-gray-900">Planos</h3>
-									</div>
-									<Button
-										size="sm"
-										className="bg-lime-600 text-white hover:bg-lime-700"
-										onClick={handleNewPlan}
-									>
-										<Plus className="mr-2 h-4 w-4" />
-										Novo Plano
-									</Button>
-								</div>
-
-								<div className="mb-4 text-sm text-gray-600">
-									<h4 className="font-medium">Planos Disponíveis</h4>
+									<QrCode className="size-20 text-gray-400" />
 								</div>
 
 								{!isMobile ?
-									<div className="max-h-96 overflow-y-auto rounded-lg border border-gray-200">
-										<Table>
-											<TableHeader>
-												<TableRow>
-													<TableHead className="table-header-cell">Descrição</TableHead>
-													<TableHead className="table-header-cell">Valor</TableHead>
-													<TableHead className="table-header-cell">Vagas</TableHead>
-													<TableHead className="table-header-cell">Status</TableHead>
-													<TableHead className="table-header-cell w-16">Ações</TableHead>
-												</TableRow>
-											</TableHeader>
-											<TableBody className="divide-y divide-gray-200 bg-white">
-												{plansLoading ?
-													<TableRow>
-														<TableCell
-															colSpan={5}
-															className="empty-state-cell"
+									<div className="flex flex-1 overflow-hidden rounded-lg border border-gray-200">
+										<CustomTabs
+											defaultValue="plans"
+											className="flex max-h-full flex-1 overflow-hidden"
+											orientation="vertical"
+										>
+											<CustomTabsList
+												orientation="vertical"
+												className="h-full w-40"
+											>
+												<CustomTabsTrigger
+													value="plans"
+													orientation="vertical"
+												>
+													<CircleDollarSignIcon />
+													<span>Planos</span>
+												</CustomTabsTrigger>
+											</CustomTabsList>
+
+											<CustomTabsContent
+												value="plans"
+												className="flex flex-1 flex-col overflow-hidden p-4"
+											>
+												<>
+													<div className="mb-4 flex flex-shrink-0 items-center justify-between text-sm text-gray-600">
+														<h4 className="font-medium">Planos Disponíveis</h4>
+														<Button
+															size="sm"
+															variant="outline"
+															className="text-lime hover:text-lime-500"
+															onClick={handleNewPlan}
 														>
-															Carregando planos...
-														</TableCell>
-													</TableRow>
-												: plans.length > 0 ?
-													plans.map((plan) => (
-														<TableRow
-															key={plan.idPlan}
-															className="hover:bg-gray-50"
-														>
-															<TableCell className="table-cell-compact font-medium">{plan.description}</TableCell>
-															<TableCell className="table-cell-compact">
-																{formatCurrency(plan.priceInCents / 100)}
-															</TableCell>
-															<TableCell className="table-cell-compact">{plan.totalVacancies}</TableCell>
-															<TableCell className="table-cell-compact">
-																<span
-																	className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-																		plan.active ? 'bg-lime-100 text-lime-800' : 'bg-gray-100 text-gray-600'
-																	}`}
-																>
-																	{plan.active ? 'Ativo' : 'Inativo'}
-																</span>
-															</TableCell>
-															<TableCell className="table-cell-action">
-																<div className="flex items-center gap-1">
-																	<Button
-																		variant="ghost"
-																		size="icon"
-																		className="size-6 text-gray-400 hover:text-gray-600"
-																		onClick={() => handleEditPlan(plan)}
-																	>
-																		<Edit className="h-4 w-4" />
-																	</Button>
-																	<Button
-																		variant="ghost"
-																		size="icon"
-																		className="size-6 text-gray-400 hover:text-gray-600"
-																	>
-																		<QrCode className="h-4 w-4" />
-																	</Button>
-																</div>
-															</TableCell>
-														</TableRow>
-													))
-												:	<TableRow>
-														<TableCell
-															colSpan={5}
-															className="empty-state-cell"
-														>
-															Nenhum plano encontrado
-														</TableCell>
-													</TableRow>
-												}
-											</TableBody>
-										</Table>
+															<Plus className="mr-2 size-4" />
+															Novo Plano
+														</Button>
+													</div>
+													<div className="flex-1 overflow-auto">
+														<Table>
+															<TableHeader>
+																<TableRow>
+																	<TableHead className="table-header-cell">Descrição</TableHead>
+																	<TableHead className="table-header-cell">Valor</TableHead>
+																	<TableHead className="table-header-cell">Vagas</TableHead>
+																	<TableHead className="table-header-cell">Status</TableHead>
+																	<TableHead className="table-header-cell w-16">Ações</TableHead>
+																</TableRow>
+															</TableHeader>
+															<TableBody className="divide-y divide-gray-200 bg-white">
+																{plansLoading ?
+																	<TableRow>
+																		<TableCell
+																			colSpan={5}
+																			className="empty-state-cell"
+																		>
+																			Carregando planos...
+																		</TableCell>
+																	</TableRow>
+																: plans.length > 0 ?
+																	plans.map((plan) => (
+																		<TableRow
+																			key={plan.idPlan}
+																			className="hover:bg-gray-50"
+																		>
+																			<TableCell className="table-cell-compact font-medium">
+																				{plan.description}
+																			</TableCell>
+																			<TableCell className="table-cell-compact">
+																				{formatCurrency(plan.priceInCents / 100)}
+																			</TableCell>
+																			<TableCell className="table-cell-compact">{plan.totalVacancies}</TableCell>
+																			<TableCell className="table-cell-compact">
+																				<span
+																					className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+																						plan.active ? 'bg-lime-100 text-lime-800' : 'bg-gray-100 text-gray-600'
+																					}`}
+																				>
+																					{plan.active ? 'Ativo' : 'Inativo'}
+																				</span>
+																			</TableCell>
+																			<TableCell className="table-cell-action">
+																				<div className="flex items-center gap-1">
+																					<Button
+																						variant="ghost"
+																						size="icon"
+																						className="size-6 text-gray-400 hover:text-gray-600"
+																						onClick={() => handleEditPlan(plan)}
+																					>
+																						<Edit className="size-4" />
+																					</Button>
+																					<Button
+																						variant="ghost"
+																						size="icon"
+																						className="size-6 text-gray-400 hover:text-gray-600"
+																					>
+																						<QrCode className="size-4" />
+																					</Button>
+																				</div>
+																			</TableCell>
+																		</TableRow>
+																	))
+																:	<TableRow>
+																		<TableCell
+																			colSpan={5}
+																			className="empty-state-cell"
+																		>
+																			Nenhum plano encontrado
+																		</TableCell>
+																	</TableRow>
+																}
+															</TableBody>
+														</Table>
+													</div>
+												</>
+											</CustomTabsContent>
+										</CustomTabs>
 									</div>
-								:	<div className="space-y-3 overflow-y-auto">
+								:	<div className="flex-1 space-y-3 overflow-y-auto">
 										{plansLoading ?
 											<div className="flex items-center justify-center py-8">
 												<span className="text-sm text-gray-500">Carregando planos...</span>
@@ -286,8 +315,8 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 										}
 									</div>
 								}
-							</Card>
-						</div>
+							</CustomTabsContent>
+						</CustomTabs>
 					</div>
 				:	<div className="flex h-full items-center justify-center">
 						<span className="text-sm text-gray-500">Garagem não encontrada</span>
