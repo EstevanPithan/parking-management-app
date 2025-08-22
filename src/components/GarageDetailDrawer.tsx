@@ -1,10 +1,12 @@
+import PlanModal from '@/components/PlanModal'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useGarage, useIsMobile, usePlans } from '@/hooks'
 import { formatCurrency } from '@/lib/utils'
-import { Building2, MapPin, Users, UserCheck, UserMinus, QrCode, Plus } from 'lucide-react'
+import { Building2, Edit, MapPin, Plus, QrCode, UserCheck, UserMinus, Users } from 'lucide-react'
+import { useState } from 'react'
 
 interface GarageDetailDrawerProps {
 	garageId: string | null
@@ -14,6 +16,8 @@ interface GarageDetailDrawerProps {
 
 export default function GarageDetailDrawer({ garageId, open, onOpenChange }: GarageDetailDrawerProps) {
 	const isMobile = useIsMobile()
+	const [planModalOpen, setPlanModalOpen] = useState(false)
+	const [selectedPlan, setSelectedPlan] = useState<(typeof plans)[0] | null>(null)
 
 	const { data: garage, isLoading } = useGarage(garageId || '', !!garageId && open)
 	const { data: plans = [], isLoading: plansLoading } = usePlans({
@@ -22,6 +26,16 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 	})
 
 	const availableSpaces = garage ? garage.countSpaces - garage.occupiedSpaces : 0
+
+	const handleNewPlan = () => {
+		setSelectedPlan(null)
+		setPlanModalOpen(true)
+	}
+
+	const handleEditPlan = (plan: (typeof plans)[0]) => {
+		setSelectedPlan(plan)
+		setPlanModalOpen(true)
+	}
 
 	if (!garageId) return null
 
@@ -126,6 +140,7 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 									<Button
 										size="sm"
 										className="bg-lime-600 text-white hover:bg-lime-700"
+										onClick={handleNewPlan}
 									>
 										<Plus className="mr-2 h-4 w-4" />
 										Novo Plano
@@ -179,13 +194,23 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 																</span>
 															</TableCell>
 															<TableCell className="table-cell-action">
-																<Button
-																	variant="ghost"
-																	size="icon"
-																	className="size-6 text-gray-400 hover:text-gray-600"
-																>
-																	<QrCode className="h-4 w-4" />
-																</Button>
+																<div className="flex items-center gap-1">
+																	<Button
+																		variant="ghost"
+																		size="icon"
+																		className="size-6 text-gray-400 hover:text-gray-600"
+																		onClick={() => handleEditPlan(plan)}
+																	>
+																		<Edit className="h-4 w-4" />
+																	</Button>
+																	<Button
+																		variant="ghost"
+																		size="icon"
+																		className="size-6 text-gray-400 hover:text-gray-600"
+																	>
+																		<QrCode className="h-4 w-4" />
+																	</Button>
+																</div>
 															</TableCell>
 														</TableRow>
 													))
@@ -229,6 +254,14 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 																variant="ghost"
 																size="icon"
 																className="size-6 flex-shrink-0 text-gray-400 hover:text-gray-600"
+																onClick={() => handleEditPlan(plan)}
+															>
+																<Edit className="h-3 w-3" />
+															</Button>
+															<Button
+																variant="ghost"
+																size="icon"
+																className="size-6 flex-shrink-0 text-gray-400 hover:text-gray-600"
 															>
 																<QrCode className="h-3 w-3" />
 															</Button>
@@ -261,6 +294,13 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 					</div>
 				}
 			</SheetContent>
+
+			<PlanModal
+				open={planModalOpen}
+				onOpenChange={setPlanModalOpen}
+				plan={selectedPlan}
+				garageId={garageId}
+			/>
 		</Sheet>
 	)
 }
