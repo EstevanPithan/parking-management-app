@@ -1,26 +1,10 @@
-import { getPlans } from '@/api/requests/plans/get-plans'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useGarage, useIsMobile } from '@/hooks'
+import { useGarage, useIsMobile, usePlans } from '@/hooks'
 import { formatCurrency } from '@/lib/utils'
 import { Building2, MapPin, Users, UserCheck, UserMinus, QrCode, Plus } from 'lucide-react'
-import { useState, useEffect } from 'react'
-
-interface Plan {
-	id: string
-	garageId: string
-	description: string
-	startValidity: string
-	endValidity: string
-	priceInCents: string
-	active: string
-	descriptionAvailable: string
-	amountDailyCancellationInCents: string
-	vehicleType: string
-	totalVacancies: number
-}
 
 interface GarageDetailDrawerProps {
 	garageId: string | null
@@ -30,22 +14,12 @@ interface GarageDetailDrawerProps {
 
 export default function GarageDetailDrawer({ garageId, open, onOpenChange }: GarageDetailDrawerProps) {
 	const isMobile = useIsMobile()
-	const [plans, setPlans] = useState<Plan[]>([])
-	const [plansLoading, setPlansLoading] = useState(true)
 
 	const { data: garage, isLoading } = useGarage(garageId || '', !!garageId && open)
-
-	useEffect(() => {
-		if (garageId && open) {
-			setPlansLoading(true)
-			getPlans({ garageId })
-				.then(setPlans)
-				.catch(() => {
-					// Handle error silently or with proper error handling
-				})
-				.finally(() => setPlansLoading(false))
-		}
-	}, [garageId, open])
+	const { data: plans = [], isLoading: plansLoading } = usePlans({
+		garageId: garageId || '',
+		enabled: !!garageId && open,
+	})
 
 	const availableSpaces = garage ? garage.countSpaces - garage.occupiedSpaces : 0
 
@@ -187,21 +161,21 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 												: plans.length > 0 ?
 													plans.map((plan) => (
 														<TableRow
-															key={plan.id}
+															key={plan.idPlan}
 															className="hover:bg-gray-50"
 														>
 															<TableCell className="table-cell-compact font-medium">{plan.description}</TableCell>
 															<TableCell className="table-cell-compact">
-																{formatCurrency(Number(plan.priceInCents) / 100)}
+																{formatCurrency(plan.priceInCents / 100)}
 															</TableCell>
 															<TableCell className="table-cell-compact">{plan.totalVacancies}</TableCell>
 															<TableCell className="table-cell-compact">
 																<span
 																	className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-																		plan.active === 'true' ? 'bg-lime-100 text-lime-800' : 'bg-gray-100 text-gray-600'
+																		plan.active ? 'bg-lime-100 text-lime-800' : 'bg-gray-100 text-gray-600'
 																	}`}
 																>
-																	{plan.active === 'true' ? 'Ativo' : 'Inativo'}
+																	{plan.active ? 'Ativo' : 'Inativo'}
 																</span>
 															</TableCell>
 															<TableCell className="table-cell-action">
@@ -235,23 +209,21 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 										: plans.length > 0 ?
 											plans.map((plan) => (
 												<div
-													key={plan.id}
+													key={plan.idPlan}
 													className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm"
 												>
 													<div className="mb-2 flex items-start justify-between">
 														<div className="flex-1">
 															<h4 className="text-sm font-medium leading-tight text-gray-900">{plan.description}</h4>
-															<p className="mt-1 text-xs text-gray-500">
-																{formatCurrency(Number(plan.priceInCents) / 100)}
-															</p>
+															<p className="mt-1 text-xs text-gray-500">{formatCurrency(plan.priceInCents / 100)}</p>
 														</div>
 														<div className="flex items-center gap-2">
 															<span
 																className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-																	plan.active === 'true' ? 'bg-lime-100 text-lime-800' : 'bg-gray-100 text-gray-600'
+																	plan.active ? 'bg-lime-100 text-lime-800' : 'bg-gray-100 text-gray-600'
 																}`}
 															>
-																{plan.active === 'true' ? 'Ativo' : 'Inativo'}
+																{plan.active ? 'Ativo' : 'Inativo'}
 															</span>
 															<Button
 																variant="ghost"
