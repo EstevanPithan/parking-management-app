@@ -1,6 +1,7 @@
 import SidebarItem from './SidebarItem'
 import { Icon } from '@/components/icon/Icon'
-import { Building2, Car, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Building2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useNavigate } from 'react-router'
 
 interface SidebarProps {
 	isOpen: boolean
@@ -9,6 +10,8 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onToggle, isMobile = false }: SidebarProps) {
+	const navigate = useNavigate()
+
 	return (
 		<aside
 			className={
@@ -21,9 +24,10 @@ export default function Sidebar({ isOpen, onToggle, isMobile = false }: SidebarP
 		>
 			<div className="flex h-12 items-center justify-start border-b border-neutral-200 px-0">
 				<div
-					className={`relative flex h-8 items-center justify-start overflow-hidden transition-all duration-300 ease-out ${
+					className={`relative flex h-8 cursor-pointer items-center justify-start overflow-hidden transition-all duration-300 ease-out ${
 						isOpen ? 'w-40' : 'w-13'
 					}`}
+					onClick={() => navigate('/')}
 				>
 					<Icon
 						name="Estapar"
@@ -52,13 +56,6 @@ export default function Sidebar({ isOpen, onToggle, isMobile = false }: SidebarP
 						label="Garagens"
 						isOpen={isOpen}
 						isActive={true}
-						href="#"
-					/>
-					<SidebarItem
-						icon={Car}
-						label="Mensalistas"
-						isOpen={isOpen}
-						isActive={false}
 						href="#"
 					/>
 				</ul>

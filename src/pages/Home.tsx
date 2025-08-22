@@ -1,5 +1,5 @@
 import CardLink from '@/components/layout/CardLink'
-import { Building2, Car } from 'lucide-react'
+import { Building2 } from 'lucide-react'
 
 export default function Home() {
 	return (
@@ -20,13 +20,6 @@ export default function Home() {
 					title="Garagens"
 					description="Veja a lista de garagens disponíveis e suas configurações."
 					href="/garagens"
-				/>
-
-				<CardLink
-					icon={Car}
-					title="Mensalistas"
-					description="Contrate vagas adicionais para seus funcionários ou visitantes."
-					href="/mensalistas"
 				/>
 			</div>
 		</div>
