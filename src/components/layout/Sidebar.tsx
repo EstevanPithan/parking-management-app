@@ -5,14 +5,19 @@ import { Building2, Car, ChevronLeft, ChevronRight } from 'lucide-react'
 interface SidebarProps {
 	isOpen: boolean
 	onToggle: () => void
+	isMobile?: boolean
 }
 
-export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
+export default function Sidebar({ isOpen, onToggle, isMobile = false }: SidebarProps) {
 	return (
 		<aside
-			className={`fixed left-0 top-0 z-50 h-full border-r border-neutral-200 bg-neutral-50 transition-[width] duration-300 ease-out ${
-				isOpen ? 'w-[220px]' : 'w-[64px]'
-			}`}
+			className={
+				isMobile ?
+					'relative h-full w-full bg-neutral-50'
+				:	`fixed left-0 top-0 z-50 h-full border-r border-neutral-200 bg-neutral-50 transition-[width] duration-300 ease-out ${
+						isOpen ? 'w-[220px]' : 'w-[64px]'
+					}`
+			}
 		>
 			<div className="flex h-12 items-center justify-start border-b border-neutral-200 px-0">
 				<div
@@ -27,16 +32,18 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
 				</div>
 			</div>
 
-			<button
-				onClick={onToggle}
-				className="absolute -right-3 top-8 z-10 rounded-full border border-neutral-200 bg-white p-1.5 shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500/40"
-				aria-expanded={isOpen}
-				aria-label={isOpen ? 'Colapsar sidebar' : 'Expandir sidebar'}
-			>
-				{isOpen ?
-					<ChevronLeft className="h-4 w-4 text-neutral-600" />
-				:	<ChevronRight className="h-4 w-4 text-neutral-600" />}
-			</button>
+			{!isMobile && (
+				<button
+					onClick={onToggle}
+					className="absolute -right-3 top-8 z-10 rounded-full border border-neutral-200 bg-white p-1.5 shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500/40"
+					aria-expanded={isOpen}
+					aria-label={isOpen ? 'Colapsar sidebar' : 'Expandir sidebar'}
+				>
+					{isOpen ?
+						<ChevronLeft className="h-4 w-4 text-neutral-600" />
+					:	<ChevronRight className="h-4 w-4 text-neutral-600" />}
+				</button>
+			)}
 
 			<nav className="mt-6 px-2">
 				<ul className="space-y-1">

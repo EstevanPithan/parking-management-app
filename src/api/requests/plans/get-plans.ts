@@ -8,16 +8,17 @@ export const getPlansSchema = z.object({
 export type GetPlansVariables = z.infer<typeof getPlansSchema>
 
 const planItemSchema = z.object({
-	id: z.string(),
-	garageId: z.string(),
+	idPlan: z.number(),
+	idGarage: z.number(),
 	description: z.string(),
 	startValidity: z.string(),
-	endValidity: z.string(),
-	priceInCents: z.string(),
-	active: z.string(),
+	endValidity: z.string().nullable(),
+	priceInCents: z.number(),
+	active: z.boolean(),
 	descriptionAvailable: z.string(),
-	amountDailyCancellationInCents: z.string(),
-	vehicleType: z.string(),
+	amountDailyCancellationInCents: z.number(),
+	VeichleType: z.number().optional(), // Inconsistência na API - às vezes maiúscula
+	veichleType: z.number().optional(), // Inconsistência na API - às vezes minúscula
 	totalVacancies: z.number().int(),
 })
 
