@@ -59,7 +59,7 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 		>
 			<SheetContent
 				side="right"
-				className="h-screen max-h-full w-full max-w-3xl overflow-hidden p-2 sm:max-w-xl md:max-w-6xl"
+				className="h-screen max-h-full w-full max-w-3xl overflow-y-auto p-2 sm:max-w-xl md:max-w-6xl"
 			>
 				{isLoading ?
 					<div className="flex h-full items-center justify-center">
@@ -69,7 +69,7 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 						/>
 					</div>
 				: garage ?
-					<div className="flex h-full flex-col gap-4 overflow-hidden">
+					<div className="flex flex-col gap-4 pb-6">
 						<div className="flex-shrink-0">
 							<SheetHeader>
 								<div className="flex flex-col items-start justify-center gap-2">
@@ -99,7 +99,7 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 
 						<CustomTabs
 							defaultValue="digital"
-							className="flex flex-1 flex-col overflow-hidden px-4"
+							className="flex flex-col px-4"
 							orientation="horizontal"
 						>
 							<CustomTabsList orientation="horizontal">
@@ -113,7 +113,7 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 
 							<CustomTabsContent
 								value="digital"
-								className="flex flex-1 flex-col space-y-4 overflow-hidden px-4"
+								className="flex flex-col space-y-4 px-4"
 							>
 								<div className="flex w-full flex-shrink-0 items-center gap-2">
 									<div className="grid w-full grid-cols-1 gap-3 md:grid-cols-3">
@@ -143,10 +143,10 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 								</div>
 
 								{!isMobile ?
-									<div className="flex flex-1 overflow-hidden rounded-lg border border-gray-200">
+									<div className="flex rounded-lg border border-gray-200">
 										<CustomTabs
 											defaultValue="plans"
-											className="flex max-h-full flex-1 overflow-hidden"
+											className="flex max-h-full flex-1"
 											orientation="vertical"
 										>
 											<CustomTabsList
@@ -164,7 +164,7 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 
 											<CustomTabsContent
 												value="plans"
-												className="flex flex-1 flex-col overflow-hidden p-4"
+												className="flex flex-1 flex-col p-4"
 											>
 												<>
 													<div className="mb-4 flex flex-shrink-0 items-center justify-between text-sm text-gray-600">
@@ -179,7 +179,7 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 															Novo Plano
 														</Button>
 													</div>
-													<div className="flex-1 overflow-auto">
+													<div className="max-h-96 overflow-auto">
 														<Table>
 															<TableHeader>
 																<TableRow>
@@ -255,7 +255,19 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 											</CustomTabsContent>
 										</CustomTabs>
 									</div>
-								:	<div className="flex-1 space-y-3 overflow-y-auto">
+								:	<div className="flex-1 space-y-3">
+										<div className="mb-4 flex items-center justify-between">
+											<h4 className="font-medium text-gray-600">Planos Disponíveis</h4>
+											<Button
+												size="sm"
+												variant="outline"
+												className="text-lime hover:text-lime-500"
+												onClick={handleNewPlan}
+											>
+												<Plus className="mr-2 size-4" />
+												Novo Plano
+											</Button>
+										</div>
 										{plansLoading ?
 											<div className="flex items-center justify-center py-8">
 												<Loading
@@ -289,13 +301,6 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 																onClick={() => handleEditPlan(plan)}
 															>
 																<Edit className="h-3 w-3" />
-															</Button>
-															<Button
-																variant="ghost"
-																size="icon"
-																className="size-6 flex-shrink-0 text-gray-400 hover:text-gray-600"
-															>
-																<QrCode className="h-3 w-3" />
 															</Button>
 														</div>
 													</div>
