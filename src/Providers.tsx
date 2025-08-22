@@ -1,5 +1,6 @@
 import { AuthProvider } from './contexts/AuthContext'
 import { router } from './routes/router'
+import { Toaster } from '@/components/ui/sonner'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { RouterProvider } from 'react-router'
@@ -25,6 +26,7 @@ export function Providers(props: ProvidersProps) {
 			<QueryClientProvider client={queryClient}>
 				<AuthProvider>
 					<RouterProvider router={props.router} />
+					<Toaster />
 				</AuthProvider>
 			</QueryClientProvider>
 		</StrictMode>
