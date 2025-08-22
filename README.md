@@ -57,14 +57,15 @@ Uma aplicação web moderna para gerenciamento de estacionamentos — com UX ins
 - Paleta Lime - Identidade Estapar
 - Cores primárias extraídas diretamente da marca Estapar
 
+Página 404 - Experiência de Usuário Amigável
+
 LINKS E REPOSITÓRIO
 
-Repositório: https://github.com/EstevanPithan/parking-management-app
+- Repositório: https://github.com/EstevanPithan/parking-management-app
+- Site implementado: https://estapar.netlify.app
 
-Site implementado: https://estapar.netlify.app
-
-Usuário: estapar
-Senha: @estapar@
+- Usuário: estapar
+- Senha: @estapar@
 
 ## 🛠️ Como Executar
 ```bash
