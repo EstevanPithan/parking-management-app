@@ -18,10 +18,10 @@ export default function CardLink({ icon: Icon, title, description, href }: CardL
 			<div className="flex items-start justify-between">
 				<div className="flex-1">
 					<div className="inline-flex items-center justify-center rounded-xl p-3">
-						<Icon className="size-6 text-lime-500" />
+						<Icon className="size-10 text-lime-500" />
 					</div>
 
-					<h3 className="mt-4 text-2xl font-semibold text-neutral-900">{title}</h3>
+					<h3 className="mt-2 text-2xl font-semibold text-neutral-900">{title}</h3>
 
 					<p className="mt-2 max-w-[65ch] text-neutral-600">{description}</p>
 				</div>
