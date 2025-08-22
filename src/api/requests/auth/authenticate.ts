@@ -28,8 +28,8 @@ export async function authenticate(data: AuthenticateVariables) {
 	const parseResult = authenticateResponseSchema.safeParse(response.data)
 
 	if (!parseResult.success) {
-		console.error('Erro no parsing do schema (authenticate):', parseResult.error)
-		console.error('Dados recebidos:', response.data)
+		console.error('Schema parsing error (authenticate):', parseResult.error)
+		console.error('Received data:', response.data)
 		throw parseResult.error
 	}
 

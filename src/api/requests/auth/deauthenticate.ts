@@ -16,8 +16,8 @@ export async function deauthenticate() {
 	const parseResult = logoutResponseSchema.safeParse(response)
 
 	if (!parseResult.success) {
-		console.error('Erro no parsing do schema (deauthenticate):', parseResult.error)
-		console.error('Dados recebidos:', response)
+		console.error('Schema parsing error (deauthenticate):', parseResult.error)
+		console.error('Received data:', response)
 		throw parseResult.error
 	}
 

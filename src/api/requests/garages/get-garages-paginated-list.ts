@@ -36,7 +36,7 @@ export async function getGaragesPaginatedList(params: GetGaragesPaginatedListVar
 	const parseResult = getGaragesPaginatedListResponseSchema.safeParse(response.data)
 
 	if (!parseResult.success) {
-		console.error('Erro on parsing schema:', parseResult.error)
+		console.error('Schema parsing error (get-garages-paginated-list):', parseResult.error)
 		console.error('Received data:', response.data)
 		throw parseResult.error
 	}

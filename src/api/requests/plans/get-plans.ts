@@ -31,8 +31,8 @@ export async function getPlans(params: GetPlansVariables = {}) {
 	const parseResult = getPlansResponseSchema.safeParse(response.data)
 
 	if (!parseResult.success) {
-		console.error('Erro no parsing do schema (get-plans):', parseResult.error)
-		console.error('Dados recebidos:', response.data)
+		console.error('Schema parsing error (get-plans):', parseResult.error)
+		console.error('Received data:', response.data)
 		throw parseResult.error
 	}
 

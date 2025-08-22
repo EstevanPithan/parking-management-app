@@ -28,8 +28,8 @@ export async function getGarage(params: GetGarageVariables) {
 	const parseResult = getGarageResponseSchema.safeParse(response.data)
 
 	if (!parseResult.success) {
-		console.error('Erro no parsing do schema (get-garage):', parseResult.error)
-		console.error('Dados recebidos:', response.data)
+		console.error('Schema parsing error (get-garage):', parseResult.error)
+		console.error('Received data:', response.data)
 		throw parseResult.error
 	}
 

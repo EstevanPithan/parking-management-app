@@ -39,8 +39,8 @@ export async function createPlan(data: CreatePlanVariables) {
 	const parseResult = createPlanResponseSchema.safeParse(response.data)
 
 	if (!parseResult.success) {
-		console.error('Erro no parsing do schema (create-plan):', parseResult.error)
-		console.error('Dados recebidos:', response.data)
+		console.error('Schema parsing error (create-plan):', parseResult.error)
+		console.error('Received data:', response.data)
 		throw parseResult.error
 	}
 
