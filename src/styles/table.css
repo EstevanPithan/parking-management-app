@@ -1,0 +1,36 @@
+.table-header-cell {
+	padding: 0.5rem 0.75rem;
+	text-align: left;
+	font-size: 0.75rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: rgb(107 114 128);
+}
+
+.table-cell-compact {
+	white-space: nowrap;
+	padding: 0.75rem;
+	font-size: 0.875rem;
+	color: rgb(17 24 39);
+}
+
+.table-cell {
+	padding: 0.75rem;
+	font-size: 0.875rem;
+	color: rgb(17 24 39);
+}
+
+.table-cell-action {
+	white-space: nowrap;
+	padding: 0.75rem;
+	font-size: 0.875rem;
+	color: rgb(107 114 128);
+	text-align: center;
+}
+
+.empty-state-cell {
+	padding: 2rem 0.75rem;
+	text-align: center;
+	color: rgb(107 114 128);
+}

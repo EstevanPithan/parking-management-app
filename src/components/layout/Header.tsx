@@ -5,7 +5,7 @@ export default function Header() {
 	const { logout } = useAuth()
 
 	return (
-		<header className="sticky top-0 z-40 h-12 bg-white">
+		<header className="sticky top-0 z-40 h-12">
 			<div className="mx-auto flex h-full items-center justify-end px-6 md:px-10">
 				<div className="flex items-center gap-3">
 					<div className="flex items-center gap-2">

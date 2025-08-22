@@ -11,7 +11,7 @@ export default function Sidebar({ isOpen, onToggle }: SidebarProps) {
 	return (
 		<aside
 			className={`fixed left-0 top-0 z-50 h-full border-r border-neutral-200 bg-neutral-50 transition-[width] duration-300 ease-out ${
-				isOpen ? 'w-[264px]' : 'w-[64px]'
+				isOpen ? 'w-[220px]' : 'w-[64px]'
 			}`}
 		>
 			<div className="flex h-12 items-center justify-start border-b border-neutral-200 px-0">
