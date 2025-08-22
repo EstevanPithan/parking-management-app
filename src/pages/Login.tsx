@@ -1,6 +1,7 @@
 import { Icon } from '@/components/icon/Icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Loading } from '@/components/ui/loading'
 import { useAuth } from '@/contexts/AuthContext'
 import { User, Lock } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -112,7 +113,12 @@ export default function Login() {
 							disabled={loading}
 							className="bg-lime h-12 w-full text-base font-medium text-white hover:bg-lime-600 disabled:opacity-50"
 						>
-							{loading ? 'Entrando...' : 'Entrar'}
+							{loading ?
+								<div className="flex items-center gap-2">
+									<Loading size={16} />
+									<span>Entrando...</span>
+								</div>
+							:	'Entrar'}
 						</Button>
 					</form>
 				</div>

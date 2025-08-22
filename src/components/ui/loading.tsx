@@ -1,21 +1,23 @@
 import { cn } from '../../lib/utils'
-import { Icon } from '../icon/Icon'
+import { LoaderPinwheel } from 'lucide-react'
 import { HTMLAttributes } from 'react'
 
 export interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
-	variant?: 'Blocks' | 'Tadpole'
+	size?: number
+	text?: string
 }
 
-export function Loading({ variant = 'Blocks', className, ...props }: LoadingProps) {
+export function Loading({ size = 24, text, className, ...props }: LoadingProps) {
 	return (
 		<div
-			className={cn(className)}
+			className={cn('flex flex-col items-center justify-center gap-2', className)}
 			{...props}
 		>
-			<Icon
-				name={'Loading' + variant}
-				className="animate-spin"
+			<LoaderPinwheel
+				size={size}
+				className="animate-spin text-lime-600"
 			/>
+			{text && <span className="animate-pulse text-sm text-gray-600">{text}</span>}
 		</div>
 	)
 }

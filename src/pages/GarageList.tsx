@@ -2,6 +2,7 @@ import GarageDetailDrawer from '@/components/GarageDetailDrawer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Loading } from '@/components/ui/loading'
 import { Switch } from '@/components/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useDebounce, useGaragesList, usePrefetchGarage, useIsMobile } from '@/hooks'
@@ -18,6 +19,10 @@ export default function GarageList() {
 
 	const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
+	// Note: Currently implementing client-side search filtering since the API is mocked
+	// and doesn't handle server-side filtering. In a real backend implementation,
+	// search filtering should be done on the server using database queries
+	// for better performance and to handle large datasets efficiently.
 	const { data: garages, isLoading } = useGaragesList({
 		currentPage: 1,
 		pageSize: 50,
@@ -90,7 +95,10 @@ export default function GarageList() {
 										colSpan={6}
 										className="empty-state-cell"
 									>
-										Carregando...
+										<Loading
+											size={32}
+											text="Carregando garagens..."
+										/>
 									</TableCell>
 								</TableRow>
 							: garages?.data && garages.data.length > 0 ?
@@ -137,7 +145,10 @@ export default function GarageList() {
 				<div className="flex-1 space-y-3 overflow-y-auto">
 					{isLoading ?
 						<div className="flex items-center justify-center py-8">
-							<span className="text-sm text-gray-500">Carregando...</span>
+							<Loading
+								size={28}
+								text="Carregando..."
+							/>
 						</div>
 					: garages?.data && garages.data.length > 0 ?
 						garages.data.map((garage) => (

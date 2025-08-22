@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Loading } from '@/components/ui/loading'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { useCreatePlan } from '@/hooks'
@@ -322,7 +323,10 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 						className="bg-lime-600 text-white hover:bg-lime-700"
 					>
 						{createPlanMutation.isPending ?
-							'Salvando...'
+							<div className="flex items-center gap-2">
+								<Loading size={16} />
+								<span>Salvando...</span>
+							</div>
 						: isEditing ?
 							'Salvar Alterações'
 						:	'Criar'}

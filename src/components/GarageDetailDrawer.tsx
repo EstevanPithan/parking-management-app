@@ -1,6 +1,7 @@
 import PlanModal from '@/components/PlanModal'
 import { Button } from '@/components/ui/button'
 import { CustomTabs, CustomTabsContent, CustomTabsList, CustomTabsTrigger } from '@/components/ui/custom-tabs'
+import { Loading } from '@/components/ui/loading'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { StatCard } from '@/components/ui/stat-card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -62,7 +63,10 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 			>
 				{isLoading ?
 					<div className="flex h-full items-center justify-center">
-						<span className="text-sm text-gray-500">Carregando...</span>
+						<Loading
+							size={36}
+							text="Carregando detalhes da garagem..."
+						/>
 					</div>
 				: garage ?
 					<div className="flex h-full flex-col gap-4 overflow-hidden">
@@ -193,7 +197,10 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 																			colSpan={5}
 																			className="empty-state-cell"
 																		>
-																			Carregando planos...
+																			<Loading
+																				size={24}
+																				text="Carregando planos..."
+																			/>
 																		</TableCell>
 																	</TableRow>
 																: plans.length > 0 ?
@@ -251,7 +258,10 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 								:	<div className="flex-1 space-y-3 overflow-y-auto">
 										{plansLoading ?
 											<div className="flex items-center justify-center py-8">
-												<span className="text-sm text-gray-500">Carregando planos...</span>
+												<Loading
+													size={24}
+													text="Carregando planos..."
+												/>
 											</div>
 										: plans.length > 0 ?
 											plans.map((plan) => (
