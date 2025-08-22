@@ -65,7 +65,7 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 		}
 	}, [plan, open])
 
-	const handleSave = async () => {
+	async function handleSave() {
 		if (!formData.description.trim()) {
 			toast.error('Descrição é obrigatória')
 			return
@@ -117,11 +117,11 @@ export default function PlanModal({ open, onOpenChange, plan, garageId }: PlanMo
 		}
 	}
 
-	const handleCancel = () => {
+	function handleCancel() {
 		onOpenChange(false)
 	}
 
-	const handleInputChange = (field: keyof typeof formData, value: any) => {
+	function handleInputChange(field: keyof typeof formData, value: any) {
 		setFormData((prev) => ({
 			...prev,
 			[field]: value,

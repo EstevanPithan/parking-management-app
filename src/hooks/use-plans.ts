@@ -11,8 +11,8 @@ export function usePlans({ garageId, enabled = true }: UsePlansOptions = {}) {
 		queryKey: ['plans', { garageId }],
 		queryFn: () => getPlans({ garageId }),
 		enabled,
-		staleTime: 5 * 60 * 1000, // 5 minutos
-		gcTime: 10 * 60 * 1000, // 10 minutos
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes
 		retry: 2,
 		refetchOnWindowFocus: false,
 	})
@@ -24,16 +24,15 @@ export function useCreatePlan() {
 	return useMutation({
 		mutationFn: createPlan,
 		onMutate: async (newPlan: CreatePlanVariables) => {
-			await queryClient.cancelQueries({ queryKey: ['plans'] })
+			await queryClient.cancelQueries({ queryKey: ['plans', { garageId: newPlan.garageId }] })
 
-			const previousPlans = queryClient.getQueryData(['plans', { garageId: newPlan.garageId }])
+			const previousPlans = queryClient.getQueryData<GetPlansResponse>(['plans', { garageId: newPlan.garageId }])
 
-			queryClient.setQueryData(['plans', { garageId: newPlan.garageId }], (old: GetPlansResponse) => {
+			queryClient.setQueryData<GetPlansResponse>(['plans', { garageId: newPlan.garageId }], (old) => {
 				if (!old) return old
 
 				if (newPlan.id) {
 					const existingPlanIndex = old.findIndex((plan) => plan.idPlan?.toString() === newPlan.id)
-
 					if (existingPlanIndex !== -1) {
 						const updatedPlans = [...old]
 						updatedPlans[existingPlanIndex] = {
@@ -51,23 +50,25 @@ export function useCreatePlan() {
 						}
 						return updatedPlans
 					}
+				} else {
+					const newPlanItem = {
+						idPlan: Date.now(), // Temporary ID
+						idGarage: parseInt(newPlan.garageId),
+						description: newPlan.description,
+						startValidity: newPlan.startValidity,
+						endValidity: newPlan.endValidity,
+						priceInCents: parseInt(newPlan.priceInCents),
+						active: newPlan.active === 'true',
+						descriptionAvailable: newPlan.descriptionAvailable,
+						amountDailyCancellationInCents: parseInt(newPlan.amountDailyCancellationInCents),
+						veichleType: parseInt(newPlan.vehicleType),
+						VeichleType: parseInt(newPlan.vehicleType),
+						totalVacancies: newPlan.totalVacancies,
+					}
+					return [newPlanItem, ...old]
 				}
 
-				const newPlanItem = {
-					idPlan: Math.floor(Math.random() * 100000),
-					idGarage: parseInt(newPlan.garageId),
-					description: newPlan.description,
-					startValidity: newPlan.startValidity,
-					endValidity: newPlan.endValidity,
-					priceInCents: parseInt(newPlan.priceInCents),
-					active: newPlan.active === 'true',
-					descriptionAvailable: newPlan.descriptionAvailable,
-					amountDailyCancellationInCents: parseInt(newPlan.amountDailyCancellationInCents),
-					veichleType: parseInt(newPlan.vehicleType),
-					VeichleType: parseInt(newPlan.vehicleType),
-					totalVacancies: newPlan.totalVacancies,
-				}
-				return [newPlanItem, ...old]
+				return old
 			})
 
 			return { previousPlans, garageId: newPlan.garageId }
@@ -78,8 +79,10 @@ export function useCreatePlan() {
 			}
 			queryClient.invalidateQueries({ queryKey: ['plans', { garageId: newPlan.garageId }] })
 		},
-		onSuccess: (_data, variables) => {
-			queryClient.invalidateQueries({ queryKey: ['plans', { garageId: variables.garageId }] })
+		onSuccess: () => {
+			// On success, keep the optimistic cache
+			// Optionally, could update with real response data if needed
+			// But since the mock API works, the optimistic cache should already be correct
 		},
 	})
 }

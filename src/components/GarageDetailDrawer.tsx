@@ -39,12 +39,12 @@ export default function GarageDetailDrawer({ garageId, open, onOpenChange }: Gar
 
 	const availableSpaces = garage ? garage.countSpaces - garage.occupiedSpaces : 0
 
-	const handleNewPlan = () => {
+	function handleNewPlan() {
 		setSelectedPlan(null)
 		setPlanModalOpen(true)
 	}
 
-	const handleEditPlan = (plan: (typeof plans)[0]) => {
+	function handleEditPlan(plan: (typeof plans)[0]) {
 		setSelectedPlan(plan)
 		setPlanModalOpen(true)
 	}

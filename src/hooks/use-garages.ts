@@ -19,8 +19,8 @@ export function useGaragesList({ currentPage = 1, pageSize = 50, garageName, ena
 				garageName,
 			}),
 		enabled,
-		staleTime: 5 * 60 * 1000, // 5 minutos
-		gcTime: 10 * 60 * 1000, // 10 minutos
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes
 		retry: 2,
 		refetchOnWindowFocus: false,
 	})
@@ -31,8 +31,8 @@ export function useGarage(garageId: string, enabled = true) {
 		queryKey: ['garages', 'detail', garageId],
 		queryFn: () => getGarage({ garageId }),
 		enabled: enabled && !!garageId,
-		staleTime: 10 * 60 * 1000, // 10 minutos
-		gcTime: 30 * 60 * 1000, // 30 minutos
+		staleTime: 10 * 60 * 1000, // 10 minutes
+		gcTime: 30 * 60 * 1000, // 30 minutes
 		retry: 2,
 		refetchOnWindowFocus: false,
 	})
