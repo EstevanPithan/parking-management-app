@@ -1,81 +1,56 @@
 # 🚗 Parking Management App
 
-Uma aplicação web moderna para gerenciamento de estacionamentos — com UX instantânea graças a optimistic updates com rollback automático. Uso onMutate para atualizar o cache local antes da requisição e onError para reverter ao estado anterior em caso de falha. Novos planos recebem ID temporário (Date.now()) até a confirmação do servidor, enquanto cancelQueries evita race conditions e mantém o cache consistente. Além disso, implementação de prefetch ao passar o mouse (hover) em botões de ação, pré-aquecendo o cache com o TanStack Query para que telas e detalhes abram quase instantaneamente.
+**Links rápidos**
+- **Aplicação publicada:** https://estapar.netlify.app
+- **Repositório:** https://github.com/EstevanPithan/parking-management-app  
+- **Login de avaliação:** usuário `estapar` • senha `@estapar@`
+
+Uma aplicação web moderna para gerenciamento de estacionamentos — com UX instantânea graças a *optimistic updates* com rollback automático. Uso `onMutate` para atualizar o cache local antes da requisição e `onError` para reverter ao estado anterior em caso de falha. Novos planos recebem ID temporário (`Date.now()`) até a confirmação do servidor, enquanto `cancelQueries` evita race conditions e mantém o cache consistente. Além disso, há **prefetch em hover** nos botões de ação, pré-aquecendo o cache com TanStack Query para que telas e detalhes abram quase instantaneamente.
 
 ## 🚀 Stack Utilizada
 
 ### React 19
-- Liberdade de arquitetura: você compõe as peças (roteamento, camada de dados, SSR se necessário) — sem camadas prescritivas.
-- Controle de bundle e performance: tree-shaking, code-splitting e lazy garantem carregamento rápido e HMR veloz — sem overengineering.
-- Agnóstico de infraestrutura: fácil de hospedar em qualquer provedor/CDN, evitando lock-in, dificuldades e custos inesperados.
-- Simplicidade poderosa: Context API para autenticação/estado global e hooks (incl. customizados) para lógica reutilizável e testável.
+- Liberdade de arquitetura: você compõe as peças (roteamento, dados, SSR se necessário) — sem camadas prescritivas.
+- Performance de bundle: tree-shaking, code-splitting e lazy garantem carregamento rápido e HMR veloz.
+- Agnóstico de infraestrutura: fácil de hospedar em qualquer provedor/CDN.
+- Simplicidade poderosa: Context API e hooks (incl. customizados) para lógica reutilizável e testável.
 
 ### TanStack Query
-- Cache inteligente: chaves declarativas, stale-while-revalidate e garbage collection — dados sempre frescos sem re-render desnecessário.
-- UX instantânea: optimistic updates com onMutate/onError para rollback automático e IDs temporários até a confirmação do servidor.
-- Concorrência sob controle: dedupe de requisições, cancelQueries e retries com backoff — evitando race conditions e estados incorretos.
-- Navegação fluida: prefetch em hover/focus e hidratação inicial — telas carregam com dados prontos e sensação de app nativo.
-- Ergonomia e escala: hooks (useQuery, useMutation, useInfiniteQuery), Devtools e invalidação declarativa — DX rápida e código previsível.
+- **Cache inteligente:** chaves declarativas, stale-while-revalidate e GC — dados frescos sem re-renders desnecessários.
+- **UX instantânea:** optimistic updates com `onMutate`/`onError` (rollback) e IDs temporários até confirmar no servidor.
+- **Concorrência sob controle:** dedupe de requisições, `cancelQueries` e retries com backoff — evitando race conditions.
+- **Navegação fluida:** prefetch em hover/focus e hidratação inicial — sensação de app nativo.
+- **Ergonomia e escala:** `useQuery`, `useMutation`, `useInfiniteQuery`, Devtools e invalidação declarativa.
 
 ### Shadcn/UI + Tailwind CSS v4
 - Componentes acessíveis (Dialog, Select, Switch, Tabs) sem lock-in
-- Sistema de design consistente com tokens padronizados
-- Escalas tipográficas e spacing padronizadas
-- Classes utilitárias previsíveis para refatoração rápida
+- Tokens e escalas tipográficas/spacing consistentes
+- Utilitárias previsíveis para refatoração rápida
 
 ### React Router
-- Roteamento declarativo e aninhado com proteção de rotas
-- Navegação SPA otimizada com ProtectedRoute
-- Estrutura orientada a componentes
-- Gerenciamento de estado de navegação
+- Roteamento declarativo/aninhado com proteção de rotas (SPA)
+- `ProtectedRoute` e gerenciamento do estado de navegação
 
 ### Vite + SWC
-- Dev server ultra-rápido com HMR instantâneo
-- Build otimizado com compilador Rust (SWC)
-- Configuração mínima com aliases de path
-- Integração perfeita com TypeScript e Tailwind
+- Dev server muito rápido com HMR
+- Build otimizado (SWC) + TS/Tailwind integrados
 
 ### Bun
-- Runtime/bundler com foco em performance superior
-- Instalação de pacotes 3x mais veloz que npm/yarn
-- Scripts de desenvolvimento simplificados
-- Integração otimizada com Vite para melhor DX
+- Runtime/bundler focado em performance
+- Instalação de pacotes muito rápida e DX simples
 
 ### Sistema de Ícones com Type Safety
-- Geração automática de tipos TypeScript através de script que escaneia `src/icons/`
-- Union type `IconName` sempre sincronizada com ícones personalizados colocados dentro da pasta `src/icons/`
-- Autocomplete inteligente e prevenção de erros em tempo de compilação
-- Componente `<Icon name="..." />` com fallback visual para ícones inexistentes
-- Manutenção zero: tipos atualizados automaticamente ao adicionar/remover ícones
-
-🎨 Design System
-- Tipografia Inter
-- Fonte moderna otimizada para interfaces digitais
-- Letterforms com legibilidade superior em telas de alta resolução
-- Performance otimizada com fallbacks para system fonts
-- Versatilidade tipográfica em diferentes pesos e tamanhos
-- Paleta Lime - Identidade Estapar
-- Cores primárias extraídas diretamente da marca Estapar
-
-Página 404 - Experiência de Usuário Amigável
-
-LINKS E REPOSITÓRIO
-
-- Repositório: https://github.com/EstevanPithan/parking-management-app
-- Site implementado: https://estapar.netlify.app
-
-- Usuário: estapar
-- Senha: @estapar@
+- Tipos TS gerados automaticamente com o script `src/scripts/genarate-icons-type.ts` a partir de `src/icons/`
+- `IconName` sempre sincronizado; `<Icon name="..."/>` com fallback
+- Autocomplete e erros prevenidos em tempo de desenvolvimento
 
 ## 🛠️ Como Executar
 ```bash
 # Instalar dependências
 bun install
 
-# Executar em modo desenvolvimento
+# Dev
 bun dev
 
-# Build para produção
+# Build
 bun run build
-```
-
