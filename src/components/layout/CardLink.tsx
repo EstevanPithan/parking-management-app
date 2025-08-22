@@ -1,4 +1,4 @@
-import { ChevronRight, LucideIcon } from 'lucide-react'
+import { LucideIcon, ArrowRight } from 'lucide-react'
 import { ReactNode } from 'react'
 
 interface CardLinkProps {
@@ -27,7 +27,7 @@ export default function CardLink({ icon: Icon, title, description, href }: CardL
 				</div>
 
 				<div className="ml-4 flex-shrink-0">
-					<ChevronRight className="size-6 text-neutral-400 opacity-40 transition-all group-hover:translate-x-1 group-hover:opacity-70" />
+					<ArrowRight className="size-6 text-neutral-400 opacity-40 transition-all group-hover:translate-x-1 group-hover:opacity-70" />
 				</div>
 			</div>
 		</a>
